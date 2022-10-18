@@ -1,0 +1,88 @@
+{% extends "MyApp/adminbase.html" %}
+{% block body %}
+<h3 class="m-4">All Student</h3>
+    <div class="row" >
+    <div class="col-12">
+      {%if students %}
+    <div class="card bg-light m-4 m-4 m-4 ">
+      <div class="card-header" ><i class=" fa-solid fa-list fa-lg"></i><i class="fa-solid  fa-lg m-2 "> Student Record</i></div>
+        <div class="card-body">
+          <p class="card-text">
+            <div class="table-responsive"><table class="table table-hover">
+              <thead>
+                <tr>
+                  
+                  
+                  <th scope="col">First Name</th>
+                  <th scope="col">Last Name</th>
+                  <th scope="col">Email-Id</th>
+                  <th scope="col">Application Type</th>
+                  <th scope="col">College-Register-Id</th>
+                  <th scope="col">Actions</th>
+                  
+                </tr>
+              </thead>
+              <tbody>
+                {% for student in students %}
+                <tr>
+                  <td>{{student.first_name}}</td>
+                  <td>{{student.last_name}}</td>
+                  <td>{{student.email_id}}</td>
+                  <td>{{student.app_type}}</td>
+                  <td>{{student.reg_id}}</td>
+                  <td>
+                    <button type="button" class="btn btn-success me-1" href="{% url 'view_student' student.id %}" data-bs-toggle="modal" data-bs-target="#myModal{{student.id}}">
+                      <i class="fa-solid fa-circle-info "></i></button>
+                  <!--MODAL VIEW_Student -->
+                <div class="modal" id="myModal{{student.id}}" tabindex="-1" aria-labelledby="myModalLabel1" aria-hidden="true">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title">Student:{{student.first_name}} {{student.last_name}}
+                           </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true"></span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        <p>Details.</p>
+                      </div>
+                      <div class="modal-footer">
+                        <ul class="list-unstyled">
+                          
+                          <li>Student FirstName: <strong>{{student.first_name}}</strong></li>
+                          <li>Student LastName: <strong>{{student.last_name}}</strong></li>
+                          <li>Student EmailId: <strong>{{student.email_id}}</strong></li>
+                          <li>Student Application Type: <strong>{{student.app_type}}</strong></li>
+                          <li>Student Tenure: <strong>{{student.tenure}}</strong> </li>
+                          <li>Student From Station: <strong>{{student.station}}</strong> </li>
+                          <li>Student Junction: <strong>{{student.Junction}}</strong> </li>
+                          <li>Student From Date: <strong>{{student.date}}</strong> </li>
+                          <li>Student UID NO: <strong>{{student.aadhar_no}}</strong></li>
+                          <li>Student Number: <strong>{{student.mobile}}</strong> </li>
+                          <li>Student College RegisteredId: <strong>{{student.reg_id}}</strong></li>
+                          <li>Student Address: <strong>{{student.address}}</strong> </li>
+
+                        </ul>
+                        <div>
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                        
+                      </div>
+                    </div>
+                  </div>
+                </div>    
+                  </td>
+                
+                </tr>
+                {% endfor %}
+                
+              </tbody>
+            </table></div></p>
+        </div>
+      </div>
+      {% else %}
+      <h5 class="alert alert-danger ms-4 me-4"><b style="color:red">No Student Records</b></h5>
+      {%endif%}
+      </div>
+    </div>
+{% endblock %}
