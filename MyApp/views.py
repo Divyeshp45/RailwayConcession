@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.shortcuts import render
-from MyApp.forms import UserApplication
-from .models import ContactU, StudentApplication
+from MyApp.forms import UserApplication,UploadFileForm
+from .models import ContactU, StudentApplication,FileUpload
 from django.http import HttpResponse,HttpResponseRedirect
 from django.urls import reverse
 # Create your views here.
@@ -69,7 +69,24 @@ def view_student(request,id):
 
 
 def adminfile(request):
-    return render(request,'MyApp/adminfile.html')
+    if request.method=='POST':
+        Approvalform=UploadFileForm(request.POST,request.FILES)
+        if Approvalform.is_valid():
+            new_f_name=Approvalform.cleaned_data['f_name']
+            new_l_name=Approvalform.cleaned_data['l_name']
+            new_reg_id=Approvalform.cleaned_data['reg_id']
+            new_file=Approvalform.cleaned_data['file']
+            new_feedbacks=Approvalform.cleaned_data['feedbacks']
+            
+            new_Approval=FileUpload(f_name=new_f_name,l_name=new_l_name,reg_id=new_reg_id,file=new_file,feedbacks=new_feedbacks)
+            new_Approval.save()
+            messages.success(request,"Successfully Submitted")
+            return render(request,'MyApp/adminfile.html',{'Approvalform':UploadFileForm(),'Success':True})
+    return render(request,'MyApp/adminfile.html',{'Approvalform':UploadFileForm()})
+
+
+
+
 
 '''Early PROJECT:
 def index(request):

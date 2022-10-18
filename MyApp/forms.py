@@ -1,5 +1,6 @@
+from cProfile import label
 from django import forms
-from  .models import StudentApplication
+from  .models import StudentApplication,FileUpload
 
 TENURE=  [('monthly','Monthly'),
         ('quaterly','Quarterly')]
@@ -9,7 +10,7 @@ APP_TYPE=[('fresh','Fresh'),('renewal','Renewal')]
 class UserApplication(forms.ModelForm):
     tenure=forms.ChoiceField(widget=forms.RadioSelect, choices=TENURE)
     app_type=forms.ChoiceField(widget=forms.RadioSelect, choices=APP_TYPE)
-    junction=forms.CharField(required=False,widget=forms.TextInput(attrs={'class': 'forms-control'}))
+    junction=forms.CharField(required=False,widget=forms.TextInput(attrs={'class': 'form-control'}))
     class Meta:
         model= StudentApplication
         fields =[ 'first_name',
@@ -38,16 +39,38 @@ class UserApplication(forms.ModelForm):
                   'date':'From Date:',
                   'mobile':'Mobile No'}
         
-        widgets={'first_name':forms.TextInput(attrs={'class':'forms-control'}),
-                  'last_name':forms.TextInput(attrs={'class':'forms-control'}),
+        widgets={'first_name':forms.TextInput(attrs={'class':'form-control'}),
+                  'last_name':forms.TextInput(attrs={'class':'form-control'}),
                  
                   'reg_id':forms.NumberInput(attrs={'class':'form-control'}),
                   'email_id':forms.EmailInput(attrs={'class':'form-control'}),
                   'aadhar_no':forms.NumberInput(attrs={'class':'form-control'}),
-                  'address':forms.Textarea(attrs={'class':'forms-control'}),
-                  'station':forms.TextInput(attrs={'class':'forms-control'}),
-                  'junction':forms.TextInput(attrs={'class':'forms-control'}),      
-                  'date':forms.DateInput(attrs={'class':'forms-control'}),
-                  'mobile':forms.NumberInput(attrs={'class':'forms-control'}),}
+                  'address':forms.Textarea(attrs={'class':'form-control'}),
+                  'station':forms.TextInput(attrs={'class':'form-control'}),
+                  'junction':forms.TextInput(attrs={'class':'form-control'}),      
+                  'date':forms.DateInput(attrs={'class':'form-control'}),
+                  'mobile':forms.NumberInput(attrs={'class':'form-control'}),}
         
-  
+class UploadFileForm(forms.ModelForm):
+   
+    file=forms.FileField(allow_empty_file=True,required=False,max_length=20)
+    
+    class Meta:
+        model= FileUpload  
+        fields =[ 'f_name',
+                  'l_name',
+                  'reg_id',
+                  'file',
+                  'feedbacks',]
+        
+        labels={
+                  'f_name':'First Name:',
+                  'l_name':'Last Name',
+                  'reg_id':'College Registered Id:',
+                  'file':'Approval Letter',
+                  'feedbacks':'Feedback'}
+        widgets={'f_name':forms.TextInput(attrs={'class':'forms-control'}),
+                  'l_name':forms.TextInput(attrs={'class':'forms-control'}),
+                 
+                  'reg_id':forms.NumberInput(attrs={'class':'form-control'}),
+                  'feedbacks':forms.Textarea(attrs={'class':'forms-control'}),}

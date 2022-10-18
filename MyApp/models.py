@@ -24,3 +24,12 @@ class StudentApplication(models.Model):
     
     def __str__(self):
         return f" {self.first_name} {self.last_name}"
+    
+class FileUpload(models.Model):
+    f_name=models.CharField(max_length=20)
+    l_name=models.CharField(max_length=20)
+    reg_id=models.CharField(max_length=20)
+    file=models.FileField(null=True)    
+    feedbacks=models.TextField(max_length=200 ,null=True,blank=True)
+    def __str__(self):
+        return f" {self.f_name} {self.l_name}"
