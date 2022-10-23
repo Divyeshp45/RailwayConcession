@@ -48,8 +48,26 @@ def app(request):
 
 
 def download(request):
+    if request.method=="POST":
+       reg_id=request.POST['reg_id']
+       try:
+           form=FileUpload.objects.get(reg_id=reg_id)
+       except FileUpload.DoesNotExist:
+           form=None
+       if form is not None:
+           if form.file:
+               context={"file":form.file,"success":True}
+           elif form.feedbacks:
+               context={"feedback":form.feedbacks,"success":True}
+           elif (form.file and form.feedbacks):    
+               context={"feedback":form.feedbacks,"file":form.file,"success":True}
+           else:
+               context={"success":True}
+           return render(request,'MyApp/download.html',context)
+       else:
+           return render(request,'MyApp/download.html',{"pending":True})
+                 
     return render(request,'MyApp/download.html')
-
 def contact(request):
       contact=ContactU.objects.all()
       context={"contacts":contact}

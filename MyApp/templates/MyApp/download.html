@@ -1,4 +1,32 @@
 {% extends "MyApp/base.html" %}
 {% block body %}
-<h1>You are in Download</h1>
+<h2 style="color:blue">Enter Your College Registered Id to Get Status</h2>
+<div class="form-control">
+    <form method="POST">
+         {% csrf_token %}
+        <label for="reg_id"> Enter College Registered Id</label>
+        <input id="reg_id" class="form-control" name="reg_id" type="number">
+        <button class="btn btn-success" type="submit">Get</button>
+    </form>
+    </div>
+{% if success %}
+{% if file %}
+    <div class="container">
+        <ul>
+        <li> <a href="{{file.url}}" download >{{file}}</a></li>
+       </div>
+{% elif feedback %}
+<div class="container">
+    <ul>
+    <li> <a href="{{file.url}}" download >{{file}}</a></li>
+    <li><h3>{{feedback}}</li>
+{% endif%}        
+    
+</div>
+{% endif %}    
+
+{% if pending %}
+<div class="alert alert-warning" role="alert">Status Pending Come Back After Some time</div>
+
+{% endif %}
 {% endblock %}

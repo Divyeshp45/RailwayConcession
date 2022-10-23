@@ -53,7 +53,7 @@ class UserApplication(forms.ModelForm):
         
 class UploadFileForm(forms.ModelForm):
    
-    file=forms.FileField(allow_empty_file=True,required=False,max_length=20)
+    file=forms.FileField(required=False,max_length=40)
     
     class Meta:
         model= FileUpload  
