@@ -61,16 +61,19 @@ class UploadFileForm(forms.ModelForm):
                   'l_name',
                   'reg_id',
                   'file',
-                  'feedbacks',]
+                  'feedbacks',
+                  ]
         
         labels={
                   'f_name':'First Name:',
                   'l_name':'Last Name',
                   'reg_id':'College Registered Id:',
                   'file':'Approval Letter',
-                  'feedbacks':'Feedback'}
+                  'feedbacks':'Feedback',
+                  'date':'Date'}
         widgets={'f_name':forms.TextInput(attrs={'class':'forms-control'}),
                   'l_name':forms.TextInput(attrs={'class':'forms-control'}),
                  
                   'reg_id':forms.NumberInput(attrs={'class':'form-control'}),
-                  'feedbacks':forms.Textarea(attrs={'class':'forms-control'}),}
+                  'feedbacks':forms.Textarea(attrs={'class':'forms-control'}),
+                  }

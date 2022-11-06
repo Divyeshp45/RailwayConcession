@@ -21,6 +21,7 @@ class StudentApplication(models.Model):
     junction=models.CharField(max_length=20,blank=True)      
     date=models.CharField(max_length=10)
     mobile=models.CharField(max_length=10,null=True,unique=True)
+    app_date=models.CharField(max_length=10,null=True)
     
     def __str__(self):
         return f" {self.first_name} {self.last_name}"
@@ -31,5 +32,6 @@ class FileUpload(models.Model):
     reg_id=models.CharField(max_length=20)
     file=models.FileField(null=True) 
     feedbacks=models.TextField(max_length=200 ,null=True,blank=True)
+    date=models.DateField(null=True)
     def __str__(self):
         return f" {self.f_name} {self.l_name}"

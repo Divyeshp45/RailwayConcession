@@ -4,6 +4,11 @@ from MyApp.forms import UserApplication,UploadFileForm
 from .models import ContactU, StudentApplication,FileUpload
 from django.http import HttpResponse,HttpResponseRedirect
 from django.urls import reverse
+from datetime import date
+from django.contrib.auth import authenticate,logout
+from django.contrib.auth import login as auth_login
+from django.shortcuts import redirect
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 #USER PAGE:
 def index(request):
@@ -25,9 +30,10 @@ def app(request):
             new_junction=form.cleaned_data['junction']     
             new_date=form.cleaned_data['date']
             new_mobile=form.cleaned_data['mobile']
+            
             if new_email_id.split("@")[1]=='sakec.ac.in':
                 if len(str(new_mobile))==10:
-                    new_student=StudentApplication(first_name=new_first_name,last_name=new_last_name,app_type=new_app_type,tenure=new_tenure,reg_id=new_reg_id,email_id=new_email_id,aadhar_no=new_aadhar_no,address=new_address,station=new_station,junction=new_junction,date=new_date,mobile=new_mobile)
+                    new_student=StudentApplication(first_name=new_first_name,last_name=new_last_name,app_type=new_app_type,tenure=new_tenure,reg_id=new_reg_id,email_id=new_email_id,aadhar_no=new_aadhar_no,address=new_address,station=new_station,junction=new_junction,date=new_date,mobile=new_mobile,app_date=date.today())
                     new_student.save()
                     return render(request,'MyApp/app.html',{
                                         'form':UserApplication(),
@@ -75,6 +81,7 @@ def contact(request):
 
 
 #Admin Page:
+@login_required
 def adminindex(request):
     return render(request,'MyApp/adminindex.html',{
         'students':StudentApplication.objects.all()})
@@ -96,42 +103,29 @@ def adminfile(request):
             new_file=Approvalform.cleaned_data['file']
             new_feedbacks=Approvalform.cleaned_data['feedbacks']
             
-            new_Approval=FileUpload(f_name=new_f_name,l_name=new_l_name,reg_id=new_reg_id,file=new_file,feedbacks=new_feedbacks)
+            new_Approval=FileUpload(f_name=new_f_name,l_name=new_l_name,reg_id=new_reg_id,file=new_file,feedbacks=new_feedbacks,date=date.today())
             new_Approval.save()
             messages.success(request,"Successfully Submitted")
             return render(request,'MyApp/adminfile.html',{'Approvalform':UploadFileForm(),'Success':True})
     return render(request,'MyApp/adminfile.html',{'Approvalform':UploadFileForm()})
 
 
+def login(request):
+    if request.method=="POST":
+        username=request.POST['name']
+        password=request.POST['password']
+        user=authenticate(username=username,password=password)
+        if user is not None:
+            auth_login(request,user)
+            messages.info(request, f"You are now logged in as {username}.")
+            return redirect("adminindex")
+        else:
+            
+            return render(request,"MyApp/login.html",{"msg":True})
+    
+    return render(request,"MyApp/login.html")
 
-
-
-'''Early PROJECT:
-def index(request):
-    return render(request,'student/index.html',{
-        'students':Student.objects.all()})
-
-def view_student(request,id):
-    student =Student.objects.get(pk=id)    
-    return HttpResponseRedirect(reverse('index'))
-
-
-'''
-'''new_student=StudentApplication(first_name=new_first_name,
-                                                     last_name=new_last_name,
-                                                     app_type=new_app_type , 
-                                                     tenure=new_tenure,
-                                                     reg_id=new_reg_id,
-                                                      email_id=new_email_id,
-                                                      aadhar_no=new_aadhar_no,
-                                                        address=new_address,
-                                                       station=new_station,
-                                                        junction=new_junction,      
-                                                       date=new_date,
-                                                     mobile=new_mobile)
-                                                     
-                                                    return render(request,'MyApp/app.html',{
-                          'form':UserApplication(),
-                          'Success':True}) 
-                                                     
-                                                     '''
+def logout_request(request):
+	logout(request)
+	messages.info(request, "You have successfully logged out.") 
+	return redirect("index")

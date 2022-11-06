@@ -18,6 +18,8 @@ from django.urls import path,include
 from MyApp import views
 
 urlpatterns = [path('', views.index, name='index'),
+               path('login', views.login, name='login'),
+               path("logout", views.logout_request, name= "logout"),
                path('app', views.app, name='app'),
                path('download', views.download, name='download'),
                path('contact', views.contact, name='contact'),
